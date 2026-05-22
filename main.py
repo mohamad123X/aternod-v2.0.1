@@ -53,8 +53,20 @@ async def start_aternos_server():
 @bot.event
 async def on_ready():
     print(f"🔥 تم تشغيل بوت {bot.user} بنجاح وهو جاهز للعمل!")
+    try:
+        # مزامنة الأوامر المائلة (Slash Commands) لمسح الأوامر القديمة وإضافة الجديدة
+        synced = await bot.tree.sync()
+        print(f"🔄 تم مزامنة {len(synced)} أوامر مائلة مع ديسكورد بنجاح.")
+    except Exception as e:
+        print(f"❌ فشل في مزامنة الأوامر: {e}")
 
-# 5. أمر تشغيل السيرفر عبر الديسكورد (اكتب !start في السيرفر)
+# 5. إضافة الأمر المائل الجديد لتثبيت اتيرنوس (Slash Command)
+@bot.tree.command(name="setup_aternos", description="إعداد وتثبيت سيرفر أترنوس الخاص بك")
+async def setup_aternos(interaction: discord.Interaction):
+    # يمكنك لاحقاً إضافة أكواد هنا لربط الحسابات أو إعداد الإعدادات الخاصة بأترنوس
+    await interaction.response.send_message("⚙️ جاري إعداد وتثبيت بيانات اتصال أترنوس...")
+
+# 6. أمر تشغيل السيرفر عبر الديسكورد (اكتب !start في السيرفر)
 @bot.command(name="start")
 async def start(ctx):
     # إرسال رسالة للمستخدم ليعلم أن البوت بدأ العمل
@@ -66,7 +78,7 @@ async def start(ctx):
     # إرسال النتيجة النهائية
     await ctx.send(result)
 
-# 6. تشغيل البوت
+# 7. تشغيل البوت
 if __name__ == "__main__":
     if not TOKEN:
         print("❌ تحذير: لم يتم العثور على توكن البوت. (هذا طبيعي إذا كنت تجربه بدون ملف .env حالياً)")
